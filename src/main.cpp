@@ -3,7 +3,7 @@
 #include <WiFiClient.h>
 #include <BlynkSimpleEsp32.h>
 
-#define BLYNK_PRINT Serial
+#define BLYNK_PRINT Serial1
 
 BlynkTimer timer;
 
@@ -27,7 +27,8 @@ void myTimerEvent()
 
 void setup()
 {
-  Serial.begin(115200);
+  Serial1.begin(115200);
+  delay(1000);
 
   Blynk.begin(BLYNK_AUTH_TOKEN, WIFI_SSID, WIFI_PASSWORD);
 
