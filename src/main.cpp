@@ -3,7 +3,7 @@
 #include <WiFiClient.h>
 #include <BlynkSimpleEsp32.h>
 
-#define BLYNK_PRINT Serial1
+#define BLYNK_PRINT Serial
 
 BlynkTimer timer;
 
@@ -27,12 +27,38 @@ void myTimerEvent()
 
 void setup()
 {
-  Serial1.begin(115200);
+  Serial.begin(115200);
   delay(1000);
-
-  Blynk.begin(BLYNK_AUTH_TOKEN, WIFI_SSID, WIFI_PASSWORD);
+  
+  Serial.println("ESP32-S2 Starting...");
+  Serial.println("Connecting to WiFi...");
+  Serial.print("SSID: ");
+  Serial.println(WIFI_SSID);
+  
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  
+  Serial.println();
+  Serial.println("WiFi connected!");
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
+  
+  Serial.println("Connecting to Blynk...");
+  Blynk.config(BLYNK_AUTH_TOKEN);
+  Blynk.connect();
+  
+  if (Blynk.connected()) {
+    Serial.println("Blynk connected!");
+  } else {
+    Serial.println("Blynk connection failed!");
+  }
 
   timer.setInterval(1000L, myTimerEvent);
+  Serial.println("Setup complete!");
 }
 
 void loop()
